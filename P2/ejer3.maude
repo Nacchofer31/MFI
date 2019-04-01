@@ -1,0 +1,21 @@
+mod EJER3 is
+
+  sorts Bit Mensaje Canal Estado .
+  ops 0 1 : -> Bit .
+  ops _>> <<_ : Bit -> Mensaje .
+
+  subsort Mensaje < Canal .
+  op perdido : -> Canal .
+  op A{_}_B{_} : Bit Canal Bit -> Estado .
+
+  var M : Mensaje .
+  vars X Y Z : Bit .
+
+  rl [perdida] : A{X} M B{Y} => A{X} perdido B{Y} .
+  rl [B-recibe] : A{X} Z >> B{Y} => A{X} Z >> B{Z} .
+  rl [B-repite] : A{X} M B{Y} => A{X} << Y B{Y} .
+  rl [A-recibe] : A{X} << 0 B{Y} => A{1} << 0 B{Y} .
+  rl [A-recibe] : A{X} << 1 B{Y} => A{0} << 0 B{Y} .
+  rl [A-repite] : A{X} M B{Y} => A{X} X >> B{Y} .
+
+endm

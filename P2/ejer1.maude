@@ -1,0 +1,57 @@
+mod EJER1 is
+  protecting NAT .
+  protecting BOOL .
+
+  --- Declaraciones de tipos para los procesos
+  sorts Process PState .
+
+  --- Un proceso tiene un identificador, tu ticket y su estado
+  op p_[_]{_} : Nat Nat PState -> Process .
+
+  --- Hay cuatro posibles estados
+  ops idle entering critical exiting : -> PState .
+
+  --- Ponemos todos los procesos juntos en un conjunto
+  sort PSet .
+  subsort Process < PSet .
+  op empty : -> PSet .
+  op __ : PSet PSet -> PSet [assoc comm id: empty] .
+  eq X:Process X:Process = X:Process .
+
+  --- Definimos el tipo semaforo
+  sort Semaphore .
+  subsort Bool < Semaphore .
+
+  --- Juntamos todos los procesos con un semaforo a compartir
+  --- que define la situacion global de todo nuestro sistema
+  sort GlobalState .
+  op _||_||_ : Semaphore Nat PSet -> GlobalState .
+
+  var N : Nat . var PS : PSet . var T : Nat .
+  var S : Semaphore . var Id : Nat .
+
+  --- incrementar ticket servido (en base 10)
+  rl false || N || PS  
+  => false || (N + 1) rem 10 || PS .
+
+  --- sigue en idle
+  rl S || N || p Id [T] {idle} PS
+  => S || N || p Id [T] {idle} PS .
+
+  --- pasa a entering
+  rl S || N || p Id [N] {idle} PS 
+  => S || N || p Id [N] {entering} PS .
+
+  --- pasa a critical
+  rl false || N || p Id [N] {entering} PS 
+  => true || N || p Id [N] {critical} PS .
+
+  --- el proceso procede a salir de critical
+  rl S || N || p Id [N] {critical} PS 
+  => S || N || p Id [N] {exiting} PS .
+
+  --- el proceso sale de la zona critical
+  rl S || N || p Id [N] {exiting} PS 
+  => false || N || p Id [N] {idle} PS .
+  
+endm

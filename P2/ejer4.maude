@@ -1,0 +1,40 @@
+mod EJER4 is
+  protecting INT .
+
+  sorts Configuracion Vagon Vagones Tren Trenes .
+  op x : -> Vagon .
+
+  subsort Vagon < Vagones .
+  op vacio : -> Vagones .
+  op __ : Vagones Vagones -> Vagones [assoc comm id: vacio] .
+  op tren_[_](_) : Int Int Vagones -> Tren .
+  op tren*_[_](_) : Int Int Vagones -> Tren . --- pasando tunel
+  op vacio : -> Trenes .
+  subsort Tren < Trenes .
+  op __ : Trenes Trenes -> Trenes [assoc comm id: vacio] .
+  
+  op _|#_#|_ : Trenes Trenes Trenes -> Configuracion .
+
+  vars Id N : Int . vars VG VG1 VG2 : Vagones . vars TR1 TR2 TR3 : Trenes .
+
+  crl [tren-avanza-izq] : tren Id [N](VG) TR1 |# TR2 #| TR3
+  => tren Id [N - 1](VG) TR1 |# TR2 #| TR3
+  
+  if N > 5 .
+  crl [tren-avanza-der] : TR1 |# TR2 #| TR3 tren Id [N](VG)
+  => TR1 |# TR2 #| TR3 tren Id [N - 1](VG)
+  
+  if (0 < N) /\ (N > 5) .
+
+  rl [empieza-tunel] : tren Id [5](x x VG) TR1 |# vacio #| TR3
+  => tren* Id [5](VG) TR1 |# tren* Id [5](x x) #| tren* Id [5](vacio) TR3 .
+  rl [entra-tunel] :
+  tren* Id [5](x x VG1) TR1 |# vacio #| tren* Id [5](VG2) TR3
+  => tren* Id [5](VG1) TR1 |# tren* Id [5](x x) #| tren* Id [5](VG2) TR3 .
+  rl [sale-tunel] :
+  tren* Id [5](x VG1) TR1 |# tren* Id [5](x x) #| tren* Id [5](VG2) TR3
+  => tren* Id [5](x VG1) TR1 |# vacio #| tren* Id [5](x x VG2) TR3 .
+  rl [termina-tunel] :
+  tren* Id [5](vacio) TR1 |# tren* Id [5](x x) #| tren* Id [5](VG2) TR3
+  => TR1 |# vacio #| tren Id [5](VG2 x x) TR3 .
+endm
