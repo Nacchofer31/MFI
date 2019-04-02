@@ -23,31 +23,26 @@ endfm
 fmod BATTERY-TASK is
 protecting BATTERY-AC .
 
+var C : Cell .  
 var Bt : Battery .
 var EBt : EmptyBattery .
 
 ---Empty Battery
 
-eq is-empty(nil) = true .
-eq is-empty(EBt) = true .
-eq is-empty(Bt +) = false .
-eq is-empty(+ Bt) = false .
-eq is-empty(Bt o) = false .
-eq is-empty(o Bt) = false .
+eq is-empty(EB) = true .
+eq is-empty(B) = false [owise] . 
 
 ---Full Battery
 
-eq is-full(- Bt) = false .
-eq is-full(Bt -) = false .
-eq is-full(+ Bt) = false .
-eq is-full(Bt +) = false .
-eq is-full(nil) = false .
-eq is-full(Bt) = true .
+eq is-full(EB) = false .
+eq is-full(o) = true .
+eq is-full(o B) = is-full(B) .
+eq is-full(B) = false [owise] . 
 
 ---Bat Life
 
-eq bat-life(- Bt) = bat-life(Bt) .
-eq bat-life(o Bt) = bat-life(Bt) + 30 .
-eq bat-life(+ Bt) = bat-life (Bt) + 15 .
-eq bat-life(nil) = 0 .
+eq bat-life(EB) = 0 .
+eq bat-life(+) = 15 .
+eq bat-life(o) = 30 .
+eq bat-life(C B) = bat-life(C) + bat-life(B) [owise] . 
 endfm

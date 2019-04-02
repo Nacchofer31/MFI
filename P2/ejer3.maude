@@ -3,11 +3,9 @@ mod EJER3 is
   sorts Bit Mensaje Canal Estado .
   ops 0 1 : -> Bit .
   ops _>> <<_ : Bit -> Mensaje .
-
   subsort Mensaje < Canal .
   op perdido : -> Canal .
   op A{_}_B{_} : Bit Canal Bit -> Estado .
-
   var M : Mensaje .
   vars X Y Z : Bit .
 

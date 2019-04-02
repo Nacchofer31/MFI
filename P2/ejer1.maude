@@ -27,6 +27,7 @@ mod EJER1 is
   sort GlobalState .
   op _||_||_ : Semaphore Nat PSet -> GlobalState .
 
+  --- Variables
   var N : Nat . var PS : PSet . var T : Nat .
   var S : Semaphore . var Id : Nat .
 
@@ -34,23 +35,23 @@ mod EJER1 is
   rl false || N || PS  
   => false || (N + 1) rem 10 || PS .
 
-  --- sigue en idle
+  --- El proceso sigue en idle
   rl S || N || p Id [T] {idle} PS
   => S || N || p Id [T] {idle} PS .
 
-  --- pasa a entering
+  --- El proceso pasa a entering
   rl S || N || p Id [N] {idle} PS 
   => S || N || p Id [N] {entering} PS .
 
-  --- pasa a critical
+  --- El proceso pasa a critical
   rl false || N || p Id [N] {entering} PS 
   => true || N || p Id [N] {critical} PS .
 
-  --- el proceso procede a salir de critical
+  --- El proceso va a salir de critical
   rl S || N || p Id [N] {critical} PS 
   => S || N || p Id [N] {exiting} PS .
 
-  --- el proceso sale de la zona critical
+  --- El proceso sale de critical
   rl S || N || p Id [N] {exiting} PS 
   => false || N || p Id [N] {idle} PS .
   
