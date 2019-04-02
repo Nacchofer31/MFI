@@ -1,0 +1,20 @@
+fmod BATTERY-MAUDE is
+    sort Cell ECell Battery EBattery .
+
+    subsorts ECell < Cell < Battery .
+    subsorts ECell < EBattery < Battery .
+
+    op o : -> Cell .
+    op + : -> Cell .
+    op - : -> ECell .
+    op nil : -> EBattery .
+    op _^_ : EBattery EBattery -> EBattery [assoc id: nil] .
+    op _^_ : Battery Battery -> Battery [assoc id: nil] .
+    op consume : Battery -> Battery .
+    
+    var Bt : Battery . var EBt : EBattery .
+
+    eq consume(EBt ^ o ^ Bt) = EBt ^ + ^ Bt .
+    eq consume(EBt ^ + ^ Bt) = EBt ^ - ^ Bt .
+    eq consume(Bt) = Bt [owise] .
+endfm    

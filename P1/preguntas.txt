@@ -1,0 +1,12 @@
+Pregunta 1 -
+Con el comando: red in BATTERY-HASKELL : consume(- ^ - ^ nil) .
+Se obtiene el siguiente resultado:
+result Battery: - ^ - ^ consume(nil)
+
+Habría que añadir una ecuación para que en el caso de que la pila ya este vacía no ejecute
+la operación consume añadiendo la siguiente ecuación:
+
+eq consume(nil) = nil .
+
+Pregunta 2 -
+Un ejemplo 

@@ -1,0 +1,14 @@
+mod BATTERY-LEFT-RIGHT is
+    protecting BATTERY-MAUDE .
+
+    op consume-left-right : Battery -> Battery .
+    
+    var EBt : EBattery .
+    var Bt : Battery .
+
+    rl consume-left-right(EBt ^ o ^ Bt) => EBt ^ + ^ Bt .
+    rl consume-left-right(EBt ^ + ^ Bt) => EBt ^ - ^ Bt .
+    rl consume-left-right(Bt ^ o ^ EBt) => Bt ^ + ^ EBt .
+    rl consume-left-right(Bt ^ + ^ EBt) => Bt ^ - ^ EBt .
+    eq consume-left-right(EBt) => EBt .
+endm

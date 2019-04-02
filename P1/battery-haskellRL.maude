@@ -1,0 +1,50 @@
+fmod BATTERY-MAUDE is
+    sort Cell ECell Battery EBattery .
+
+    subsorts ECell < Cell < Battery .
+    subsorts ECell < EBattery < Battery .
+
+    op o : -> Cell .
+    op + : -> Cell .
+    op - : -> ECell .
+    op nil : -> EBattery .
+    op _^_ : EBattery EBattery -> EBattery [assoc id: nil] .
+    op _^_ : Battery Battery -> Battery [assoc id: nil] .
+    op consume : Battery -> Battery .
+    
+    var Bt : Battery . var EBt : EBattery .
+
+    eq consume(EBt ^ o ^ Bt) = EBt ^ + ^ Bt .
+    eq consume(EBt ^ + ^ Bt) = EBt ^ - ^ Bt .
+    eq consume(Bt) = Bt [owise] .
+endfm
+
+mod BATTERY-LEFT-RIGHT is
+    protecting BATTERY-MAUDE .
+
+    op consume-left-right : Battery -> Battery .
+    
+    var EBt : EBattery .
+    var Bt : Battery .
+
+    rl consume-left-right(EBt ^ o ^ Bt) => EBt ^ + ^ Bt .
+    rl consume-left-right(EBt ^ + ^ Bt) => EBt ^ - ^ Bt .
+    rl consume-left-right(Bt ^ o ^ EBt) => Bt ^ + ^ EBt .
+    rl consume-left-right(Bt ^ + ^ EBt) => Bt ^ - ^ EBt .
+    eq consume-left-right(EBt) => EBt .
+endm
+
+mod BATTERY-ANY is
+    protecting BATTERY-MAUDE .
+    
+    op consume-any : Battery -> Battery .
+    
+    var EBt : EBattery .
+    vars Bt1 Bt2 : Battery .
+
+    rl consume-left-right(EBt ^ o ^ Bt1) => EBt ^ + ^ Bt1 .
+    rl consume-left-right(EBt ^ + ^ Bt1) => EBt ^ - ^ Bt .
+    rl consume-left-right(Bt ^ o ^ EBt) => Bt ^ + ^ EBt .
+    rl consume-left-right(Bt ^ + ^ EBt) => Bt ^ - ^ EBt .
+    eq consume-left-right(EBt) => EBt .
+endm

@@ -1,0 +1,53 @@
+fmod BATTERY-AC is
+protecting BOOL .
+protecting NAT .
+
+sort EmptyCell Cell EmptyBattery Battery .
+subsorts EmptyBattery < Cell < Battery .
+subsorts EmptyCell < EmptyBattery < Battery .
+
+ops - : -> EmptyCell [ctor] .
+ops o + : -> Cell [ctor] .
+
+op nil : -> EmptyBattery [ctor] .
+op __ : Battery Battery -> Battery [ctor assoc comm id: nil] .
+op __ : EmptyBattery EmptyBattery -> EmptyBattery [ctor assoc comm id: nil] .
+
+op is-empty : Battery -> Bool .
+op is-full : Battery -> Bool .
+op bat-life : Battery -> Nat .
+
+endfm
+
+
+fmod BATTERY-TASK is
+protecting BATTERY-AC .
+
+var Bt : Battery .
+var EBt : EmptyBattery .
+
+---Empty Battery
+
+eq is-empty(nil) = true .
+eq is-empty(EBt) = true .
+eq is-empty(Bt +) = false .
+eq is-empty(+ Bt) = false .
+eq is-empty(Bt o) = false .
+eq is-empty(o Bt) = false .
+
+---Full Battery
+
+eq is-full(- Bt) = false .
+eq is-full(Bt -) = false .
+eq is-full(+ Bt) = false .
+eq is-full(Bt +) = false .
+eq is-full(nil) = false .
+eq is-full(Bt) = true .
+
+---Bat Life
+
+eq bat-life(- Bt) = bat-life(Bt) .
+eq bat-life(o Bt) = bat-life(Bt) + 30 .
+eq bat-life(+ Bt) = bat-life (Bt) + 15 .
+eq bat-life(nil) = 0 .
+endfm
