@@ -1,0 +1,26 @@
+MODULE main
+VAR
+    pastor : boolean;
+    oveja : boolean;
+    col : boolean;
+    lobo : boolean;
+ASSIGN
+init(pastor) := FALSE;
+init(oveja) := FALSE;
+init(col) := FALSE;
+init(lobo) := FALSE;
+next(pastor) := !pastor;
+next(oveja) :=
+    case
+
+    esac;
+next(col) :=
+    case
+
+    esac;
+next(lobo) :=
+    case
+    (pastor = lobo) & (next(col) = col) & (next(oveja) = oveja) : {TRUE,FALSE};
+    TRUE: lobo;
+esac;
+SPEC

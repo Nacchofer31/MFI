@@ -22,12 +22,7 @@ ASSIGN
 			input = data & (data = 1) : 0;
 			TRUE : data;
 		esac;
-	next(output) :=
-		case
-			input = error : output;
-			input = 0 : 0;
-			input = 1 : 1;
-		esac;
+	next(output) := data;
 FAIRNESS running
 
 MODULE receiver
@@ -46,14 +41,7 @@ ASSIGN
 FAIRNESS running
 
 MODULE channel(input, output)
-VAR
-	fail : 0..1;
 ASSIGN
-	next(fail) :=
-		case
-			fail = 1 : 0;
-			fail = 0 : 1;
-		esac;
 	next(output) :=
 		case
 			next(fail) = 1 : error;
