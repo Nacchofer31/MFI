@@ -31,4 +31,3 @@ ASSIGN
 	esac;
 SPEC
 AF((pastor = FALSE & oveja = FALSE & lobo = FALSE & col = FALSE) -> EF(pastor = TRUE & oveja = TRUE & lobo = TRUE & col = TRUE)) 
-
