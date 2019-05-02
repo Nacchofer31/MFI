@@ -1,26 +1,34 @@
 MODULE main
 VAR
-    pastor : boolean;
-    oveja : boolean;
-    col : boolean;
-    lobo : boolean;
+	pastor : boolean;
+	oveja : boolean;
+	col : boolean;
+	lobo : boolean;
 ASSIGN
-init(pastor) := FALSE;
-init(oveja) := FALSE;
-init(col) := FALSE;
-init(lobo) := FALSE;
-next(pastor) := !pastor;
-next(oveja) :=
-    case
+	init(pastor) := FALSE;
+	init(oveja)     := FALSE;
+	init(col)  := FALSE;
+	init(lobo)     := FALSE;
 
-    esac;
-next(col) :=
-    case
-
-    esac;
-next(lobo) :=
-    case
-    (pastor = lobo) & (next(col) = col) & (next(oveja) = oveja) : {TRUE,FALSE};
-    TRUE: lobo;
-esac;
+	next(pastor) := !pastor;
+	next(oveja) :=
+		case
+			oveja = !oveja & col = oveja & lobo = oveja & next(pastor) = !oveja : TRUE;
+			oveja = !oveja & col = !oveja & lobo = oveja & next(pastor) = !oveja : TRUE;
+		TRUE : oveja;
+	esac;
+	next(col) :=
+		case
+			col = !col & oveja = col & lobo = !col & next(pastor) = !col : TRUE;
+			col = !col & oveja = !col & lobo = col & next(pastor) = !col : TRUE;
+		TRUE : col;
+	esac;
+	next(lobo) :=
+		case
+			lobo = !lobo & oveja = lobo & col = !lobo & next(pastor) = !lobo : TRUE;
+			lobo = !lobo & oveja = !lobo & col = lobo & next(pastor) = !lobo : TRUE;
+		TRUE: lobo;
+	esac;
 SPEC
+AF((pastor = FALSE & oveja = FALSE & lobo = FALSE & col = FALSE) -> EF(pastor = TRUE & oveja = TRUE & lobo = TRUE & col = TRUE)) 
+
